@@ -66,6 +66,54 @@ public class OfferServiceTests
     }
 
     [Fact]
+    public async Task GetActiveOffersAsync_ExcludesOffersBeforeValidFrom()
+    {
+        // Arrange
+        await using var context = CreateContext();
+
+        context.Products.Add(new Product
+        {
+            Id        = 1,
+            Name      = "Test Product",
+            Category  = "Test",
+            CreatedAt = DateTime.UtcNow
+        });
+
+        context.Offers.AddRange(
+            new Offer
+            {
+                Id        = 1,
+                ProductId = 1,
+                Price     = 1.00m,
+                ValidFrom = DateTime.UtcNow.AddDays(-1),
+                ValidTo   = DateTime.UtcNow.AddDays(1),
+                Status    = OfferStatus.Active,
+                CreatedAt = DateTime.UtcNow
+            },
+            new Offer
+            {
+                Id        = 2,
+                ProductId = 1,
+                Price     = 2.00m,
+                ValidFrom = DateTime.UtcNow.AddDays(1),
+                ValidTo   = DateTime.UtcNow.AddDays(10),
+                Status    = OfferStatus.Active,
+                CreatedAt = DateTime.UtcNow
+            }
+        );
+        await context.SaveChangesAsync();
+
+        var service = new OfferService(context);
+
+        // Act
+        var result = await service.GetActiveOffersAsync();
+
+        // Assert
+        Assert.Single(result);
+        Assert.Equal(1, result.First().Id);
+    }
+
+    [Fact]
     public async Task GetByIdAsync_ReturnsNull_WhenOfferDoesNotExist()
     {
         // Arrange
@@ -104,7 +152,7 @@ public class OfferServiceTests
         var result = await service.GetActiveOffersAsync();
 
         var expectedActiveOfferIds = await context.Offers
-            .Where(offer => offer.ValidTo >= DateTime.UtcNow && offer.Status == OfferStatus.Active)
+            .Where(offer => offer.ValidFrom <= DateTime.UtcNow && offer.ValidTo >= DateTime.UtcNow && offer.Status == OfferStatus.Active)
             .Select(offer => offer.Id)
             .ToListAsync();
 

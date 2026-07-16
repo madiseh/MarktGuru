@@ -19,7 +19,7 @@ public class OfferService : IOfferService
         var now = DateTime.UtcNow;
         var offers = await _context.Offers
             .Include(o => o.Product)
-            .Where(o => o.ValidTo >= now && o.Status == OfferStatus.Active)
+            .Where(o => o.ValidFrom <= now && o.ValidTo >= now && o.Status == OfferStatus.Active)
             .ToListAsync();
 
         return offers.Select(o => new OfferDto(o));
