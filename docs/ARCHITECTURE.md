@@ -10,11 +10,28 @@ Offers Service is an ASP.NET Core backend for retail product offers. It exposes 
 |-------|----------|----------------|
 | API | `src/OffersService/Controllers` | Request routing, validation responses, HTTP status codes |
 | Services | `src/OffersService/Services` | Business logic, imports, offer/product workflows |
-| IOC | `src/OffersService/IOC` | Dependency injection registration extensions |
+| IOC | `src/OffersService/IOC` | Dependency injection and application middleware registration extensions |
+| Validators | `src/OffersService/Validators` | FluentValidation rules for API/import contracts |
+| Exceptions | `src/OffersService/Exceptions` | Problem-details exception handling for validation and unexpected errors |
+| Extensions | `src/OffersService/Extensions` | Shared query and framework helper extensions |
 | Models | `src/OffersService/Models` | EF Core entities and domain enums |
 | DTOs | `src/OffersService/DTOs` | API and import contracts |
 | Data | `src/OffersService/Data` | DbContext, entity type configurations, migrations |
 | Tests | `tests/OffersService.Tests` | Unit and integration coverage |
+
+## Application Composition
+
+`Program.cs` wires top-level application startup only. Feature-specific service
+registrations and middleware setup live behind extension methods in
+`src/OffersService/IOC`, including application services and centralized
+exception handling.
+
+## Import Validation
+
+Offer imports are validated before persistence with FluentValidation. Row-level
+rules validate product ID, price, and validity dates. Request-level rules check
+that referenced products exist and return structured `400 Bad Request` problem
+details when validation fails.
 
 ## Data Model
 

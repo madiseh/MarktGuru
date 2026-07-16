@@ -25,12 +25,21 @@ src/OffersService/
 |   |-- OfferService.cs
 |   |-- ProductService.cs
 |   `-- OfferImportService.cs
+|-- Validators/
+|   |-- ImportRequestValidator.cs
+|   `-- OfferRowValidator.cs
+|-- Exceptions/
+|   |-- GlobalExceptionHandler.cs
+|   `-- ValidationExceptionHandler.cs
+|-- Extensions/
+|   `-- QueryableExtensions.cs
 |-- Models/
 |   |-- Product.cs
 |   |-- Offer.cs
 |   `-- OfferStatus.cs
 |-- DTOs/
 |-- IOC/
+|   |-- ExceptionHandling.cs
 |   `-- Services.cs
 `-- Data/
     |-- AppDbContext.cs

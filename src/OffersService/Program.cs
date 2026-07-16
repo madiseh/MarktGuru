@@ -26,6 +26,7 @@ builder.Services.AddApplicationServices();
 
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
+builder.Services.AddApplicationExceptionHandling();
 
 var app = builder.Build();
 
@@ -34,7 +35,9 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    if (db.Database.IsRelational())
+    if (app.Environment.IsEnvironment("Test"))
+        await db.Database.EnsureCreatedAsync();
+    else if (db.Database.IsRelational())
         await db.Database.MigrateAsync();
     else
         await db.Database.EnsureCreatedAsync();
@@ -45,6 +48,7 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi(); // available at /openapi/v1.json
 }
 
+app.UseApplicationExceptionHandling();
 app.UseHangfireDashboard("/hangfire");
 app.MapControllers();
 

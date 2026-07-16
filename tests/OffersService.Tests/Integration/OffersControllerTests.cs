@@ -54,7 +54,7 @@ public class OffersControllerTests : IClassFixture<TestWebApplicationFactory>
     }
 
     [Fact]
-    public async Task ImportOffers_Returns500_WhenProductDoesNotExist()
+    public async Task ImportOffers_Returns400_WhenProductDoesNotExist()
     {
         // Arrange
         var client = _factory.CreateClient();
@@ -77,6 +77,6 @@ public class OffersControllerTests : IClassFixture<TestWebApplicationFactory>
         var response = await client.PostAsJsonAsync("/api/offers/import", request);
 
         // Assert — expects 500 from FK violation, but gets 202 because async void swallows the exception
-        Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 }

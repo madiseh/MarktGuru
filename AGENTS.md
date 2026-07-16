@@ -36,3 +36,4 @@ rtk powershell -NoProfile -Command "Get-ChildItem -Force"
 - Keep EF Core queries intentional; avoid N+1 behavior.
 - Use reversible migrations for schema changes.
 - Every EF Core entity configuration must explicitly set the table name with `ToTable(...)` using constants from `TableNames`.
+- Keep feature-specific service registrations and middleware setup behind focused extension methods in `src/OffersService/IOC`.
