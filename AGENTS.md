@@ -3,7 +3,7 @@
 ## Core Rules
 
 - Follow `C:\Users\madis\.codex\RTK.md`: run shell commands through `rtk`.
-- Keep `AGENTS.md` and relevant files under `docs/` in sync with every future code, API, architecture, workflow, or test change.
+- Keep durable project rules in `AGENTS.md`, relevant long-form guidance under `docs/`, and implementation/change notes in `Solution.md`.
 - Keep architecture and other long-form notes in separate Markdown files under `docs/`.
 - Before working on a topic, read the matching document from `Documentation Routing`.
 - Do not overwrite user changes. Read the current files first and work with the existing state.

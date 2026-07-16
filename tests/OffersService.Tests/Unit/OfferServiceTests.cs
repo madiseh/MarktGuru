@@ -103,7 +103,12 @@ public class OfferServiceTests
         // Act
         var result = await service.GetActiveOffersAsync();
 
-        // Assert — expects 3 but service correctly returns 2 (Offer 2 has ValidTo in the past)
-        Assert.Equal(3, result.Count());
+        var expectedActiveOfferIds = await context.Offers
+            .Where(offer => offer.ValidTo >= DateTime.UtcNow && offer.Status == OfferStatus.Active)
+            .Select(offer => offer.Id)
+            .ToListAsync();
+
+        Assert.Equal(expectedActiveOfferIds.Count, result.Count());
+        Assert.Equal(expectedActiveOfferIds.OrderBy(id => id), result.Select(offer => offer.Id).OrderBy(id => id));
     }
 }
