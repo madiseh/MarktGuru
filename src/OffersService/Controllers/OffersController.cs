@@ -18,9 +18,9 @@ public class OffersController : ControllerBase
     }
 
     [HttpGet("active")]
-    public ActionResult<IEnumerable<OfferDto>> GetActiveOffers()
+    public async Task<ActionResult<IEnumerable<OfferDto>>> GetActiveOffers()
     {
-        var offers = _offerService.GetActiveOffersAsync().Result;
+        var offers = await _offerService.GetActiveOffersAsync();
         return Ok(offers);
     }
 

@@ -20,6 +20,34 @@ public class OffersControllerTests : IClassFixture<TestWebApplicationFactory>
     }
 
     [Fact]
+    public async Task GetActiveOffers_ReturnsActiveOffers_InResponseBody()
+    {
+        // Arrange
+        var client = _factory.CreateClient();
+
+        // Act
+        var response = await client.GetAsync("/api/offers/active");
+
+        // Assert
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        var body = await response.Content.ReadAsStringAsync();
+        Assert.False(string.IsNullOrEmpty(body), "Response body should contain active offers but was empty.");
+
+        using var json = JsonDocument.Parse(body);
+        Assert.Equal(JsonValueKind.Array, json.RootElement.ValueKind);
+
+        var offerIds = json.RootElement
+            .EnumerateArray()
+            .Select(offer => offer.GetProperty("id").GetInt32())
+            .ToArray();
+
+        Assert.Contains(1, offerIds);
+        Assert.Contains(3, offerIds);
+        Assert.DoesNotContain(2, offerIds);
+    }
+
+    [Fact]
     public async Task ImportOffers_ReturnsImportedCount_InResponseBody()
     {
         // Arrange
