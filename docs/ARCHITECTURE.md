@@ -12,7 +12,7 @@ Offers Service is an ASP.NET Core backend for retail product offers. It exposes 
 | Services | `src/OffersService/Services` | Business logic, imports, offer/product workflows |
 | Models | `src/OffersService/Models` | EF Core entities and domain enums |
 | DTOs | `src/OffersService/DTOs` | API and import contracts |
-| Data | `src/OffersService/Data` | DbContext, model configuration, migrations |
+| Data | `src/OffersService/Data` | DbContext, entity type configurations, migrations |
 | Tests | `tests/OffersService.Tests` | Unit and integration coverage |
 
 ## Data Model
@@ -22,6 +22,8 @@ Current seeded model:
 - `Product`: product records.
 - `Offer`: offer records with price, validity window, and status.
 - `OfferStatus`: `Pending`, `Active`, `Expired`.
+
+Entity mapping and seed data are defined in `src/OffersService/Data/Configurations` using EF Core `IEntityTypeConfiguration<T>` classes and loaded from `AppDbContext.OnModelCreating`. Every entity configuration must explicitly set the table name with `ToTable(...)`, and table names must come from `src/OffersService/Data/TableNames.cs`.
 
 Planned model extension from `README.md`:
 

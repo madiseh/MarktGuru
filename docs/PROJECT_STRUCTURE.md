@@ -4,48 +4,51 @@
 
 ```text
 .
-├── README.md
-├── AGENTS.md
-├── OffersService.sln
-├── docker-compose.yml
-├── .env.example
-├── src/
-├── tests/
-└── docs/
+|-- README.md
+|-- AGENTS.md
+|-- OffersService.sln
+|-- docker-compose.yml
+|-- .env.example
+|-- src/
+|-- tests/
+`-- docs/
 ```
 
 ## Service
 
 ```text
 src/OffersService/
-├── Controllers/
-│   ├── OffersController.cs
-│   └── ProductsController.cs
-├── Services/
-│   ├── OfferService.cs
-│   ├── ProductService.cs
-│   └── OfferImportService.cs
-├── Models/
-│   ├── Product.cs
-│   ├── Offer.cs
-│   └── OfferStatus.cs
-├── DTOs/
-└── Data/
-    ├── AppDbContext.cs
-    └── Migrations/
+|-- Controllers/
+|   |-- OffersController.cs
+|   `-- ProductsController.cs
+|-- Services/
+|   |-- OfferService.cs
+|   |-- ProductService.cs
+|   `-- OfferImportService.cs
+|-- Models/
+|   |-- Product.cs
+|   |-- Offer.cs
+|   `-- OfferStatus.cs
+|-- DTOs/
+`-- Data/
+    |-- AppDbContext.cs
+    |-- Configurations/
+    |   |-- ProductConfiguration.cs
+    |   `-- OfferConfiguration.cs
+    `-- Migrations/
 ```
 
 ## Tests
 
 ```text
 tests/OffersService.Tests/
-├── Unit/
-│   └── OfferServiceTests.cs
-├── Integration/
-│   └── OffersControllerTests.cs
-├── Helpers/
-│   └── TestWebApplicationFactory.cs
-└── OffersService.Tests.csproj
+|-- Unit/
+|   `-- OfferServiceTests.cs
+|-- Integration/
+|   `-- OffersControllerTests.cs
+|-- Helpers/
+|   `-- TestWebApplicationFactory.cs
+`-- OffersService.Tests.csproj
 ```
 
 ## Current API Surface
