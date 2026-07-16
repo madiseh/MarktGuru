@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "OffersService": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:7943;http://localhost:7944"
+    }
+  }
+}
