@@ -13,7 +13,7 @@ public class OfferImportService : IOfferImportService
         _context = context;
     }
 
-    public async void ImportAsync(IEnumerable<OfferRow> rows)
+    public async Task ImportAsync(IEnumerable<OfferRow> rows)
     {
         foreach (var row in rows)
         {

@@ -39,6 +39,7 @@ rtk powershell -NoProfile -Command "Get-ChildItem -Force"
 
 ## Change Notes
 
+- 2026-07-16: Await offer import execution from `OffersController` and changed import service contract from `async void` to `Task`.
 - 2026-07-16: Added `src/OffersService/IOC/Services.cs` for application service dependency injection registration.
 - 2026-07-16: Added `TableNames` constants for EF Core table names and updated configurations to use them.
 - 2026-07-16: Required explicit EF Core table names and added `ToTable(...)` to current entity configurations.

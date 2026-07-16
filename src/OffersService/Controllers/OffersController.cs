@@ -34,9 +34,9 @@ public class OffersController : ControllerBase
     }
 
     [HttpPost("import")]
-    public ActionResult Import([FromBody] ImportRequest request)
+    public async Task<ActionResult> Import([FromBody] ImportRequest request)
     {
-        _importService.ImportAsync(request.Rows);
+        await _importService.ImportAsync(request.Rows);
         return Accepted();
     }
 }
