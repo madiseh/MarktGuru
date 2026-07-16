@@ -1,0 +1,22 @@
+# Solution
+
+## Bugs Found and Fixed
+
+- 2026-07-16: Awaited offer import execution from `OffersController` and changed the import service contract from `async void` to `Task`.
+
+## Design Decisions
+
+- 2026-07-16: Added `src/OffersService/IOC/Services.cs` for application service dependency injection registration.
+- 2026-07-16: Added `TableNames` constants for EF Core table names and updated configurations to use them.
+- 2026-07-16: Required explicit EF Core table names and added `ToTable(...)` to current entity configurations.
+- 2026-07-16: Moved EF Core entity mapping and seed data into `Data/Configurations` with `IEntityTypeConfiguration<T>`.
+- 2026-07-16: Added project agent rules, documentation routing, and initial `docs/` Markdown files.
+
+## With More Time
+
+- To be completed before submission.
+
+## Time Spent
+
+- Without AI: To be completed before submission.
+- With AI: To be completed before submission.
