@@ -10,6 +10,7 @@ Offers Service is an ASP.NET Core backend for retail product offers. It exposes 
 |-------|----------|----------------|
 | API | `src/OffersService/Controllers` | Request routing, validation responses, HTTP status codes |
 | Services | `src/OffersService/Services` | Business logic, imports, offer/product workflows |
+| IOC | `src/OffersService/IOC` | Dependency injection registration extensions |
 | Models | `src/OffersService/Models` | EF Core entities and domain enums |
 | DTOs | `src/OffersService/DTOs` | API and import contracts |
 | Data | `src/OffersService/Data` | DbContext, entity type configurations, migrations |

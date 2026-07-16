@@ -30,6 +30,8 @@ src/OffersService/
 |   |-- Offer.cs
 |   `-- OfferStatus.cs
 |-- DTOs/
+|-- IOC/
+|   `-- Services.cs
 `-- Data/
     |-- AppDbContext.cs
     |-- Configurations/

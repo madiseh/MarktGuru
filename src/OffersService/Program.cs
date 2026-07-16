@@ -2,7 +2,7 @@ using Hangfire;
 using Hangfire.MySql;
 using Microsoft.EntityFrameworkCore;
 using OffersService.Data;
-using OffersService.Services;
+using OffersService.IOC;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,10 +22,7 @@ builder.Services.AddHangfire(config =>
     })));
 builder.Services.AddHangfireServer();
 
-// Application services
-builder.Services.AddScoped<IOfferService, OfferService>();
-builder.Services.AddScoped<IProductService, ProductService>();
-builder.Services.AddScoped<IOfferImportService, OfferImportService>();
+builder.Services.AddApplicationServices();
 
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
