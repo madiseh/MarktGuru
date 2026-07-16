@@ -1,5 +1,6 @@
 using System.Net;
 using System.Net.Http.Json;
+using System.Text.Json;
 using Microsoft.Extensions.DependencyInjection;
 using OffersService.Data;
 using OffersService.DTOs;
@@ -47,6 +48,9 @@ public class OffersControllerTests : IClassFixture<TestWebApplicationFactory>
         // and immediately returns Accepted() with no body, this will be null.
         var body = await response.Content.ReadAsStringAsync();
         Assert.False(string.IsNullOrEmpty(body), "Response body should contain import result but was empty.");
+
+        using var json = JsonDocument.Parse(body);
+        Assert.Equal(request.Rows.Count(), json.RootElement.GetProperty("importedCount").GetInt32());
     }
 
     [Fact]

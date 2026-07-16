@@ -3,6 +3,7 @@
 ## Bugs Found and Fixed
 
 - 2026-07-16: Awaited offer import execution from `OffersController` and changed the import service contract from `async void` to `Task`.
+- 2026-07-16: Returned the imported offer row count from the import service and `POST /api/offers/import` response body.
 - 2026-07-16: test fix so active-offer seed expectations are computed dynamically.
 
 ## Design Decisions

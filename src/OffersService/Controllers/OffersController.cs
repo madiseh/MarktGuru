@@ -36,7 +36,7 @@ public class OffersController : ControllerBase
     [HttpPost("import")]
     public async Task<ActionResult> Import([FromBody] ImportRequest request)
     {
-        await _importService.ImportAsync(request.Rows);
-        return Accepted();
+        var importedCount = await _importService.ImportAsync(request.Rows);
+        return Accepted(new { importedCount });
     }
 }

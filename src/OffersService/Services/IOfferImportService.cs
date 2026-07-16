@@ -4,5 +4,5 @@ namespace OffersService.Services;
 
 public interface IOfferImportService
 {
-    Task ImportAsync(IEnumerable<OfferRow> rows);
+    Task<int> ImportAsync(IEnumerable<OfferRow> rows);
 }

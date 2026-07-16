@@ -13,9 +13,11 @@ public class OfferImportService : IOfferImportService
         _context = context;
     }
 
-    public async Task ImportAsync(IEnumerable<OfferRow> rows)
+    public async Task<int> ImportAsync(IEnumerable<OfferRow> rows)
     {
-        foreach (var row in rows)
+        var offerRows = rows.ToList();
+
+        foreach (var row in offerRows)
         {
             await _context.Offers.AddAsync(new Offer
             {
@@ -28,5 +30,7 @@ public class OfferImportService : IOfferImportService
             });
         }
         await _context.SaveChangesAsync();
+
+        return offerRows.Count;
     }
 }
