@@ -15,6 +15,11 @@ public class ImportRequestValidator : AbstractValidator<ImportRequest>
             .WithMessage(ImportValidationMessages.RowsRequired);
 
         RuleForEach(request => request.Rows)
+            .NotNull()
+            .WithMessage(ImportValidationMessages.OfferRowRequired)
+            .When(request => request.Rows is not null);
+
+        RuleForEach(request => request.Rows)
             .SetValidator(offerRowValidator)
             .When(request => request.Rows is not null);
 
@@ -27,6 +32,7 @@ public class ImportRequestValidator : AbstractValidator<ImportRequest>
                 }
 
                 var productIds = rows
+                    .Where(row => row is not null)
                     .Select(row => row.ProductId)
                     .Where(productId => productId > 0)
                     .Distinct()

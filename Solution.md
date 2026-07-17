@@ -6,6 +6,10 @@
 - 2026-07-16: Returned the imported offer row count from the import service and `POST /api/offers/import` response body.
 - 2026-07-16: test fix so active-offer seed expectations are computed dynamically.
 - 2026-07-16: Added FluentValidation import validation so invalid offer rows and missing product IDs return `400 Bad Request` before persistence.
+- 2026-07-16: Fixed active-offer filtering so future offers are excluded until their `ValidFrom` date is reached.
+- 2026-07-16: Replaced the blocking active-offers endpoint `.Result` call with async/await and added integration coverage for the response body.
+- 2026-07-17: Added validation for null import row payloads so `rows = null` returns `400 Bad Request` instead of being enumerated by the import service.
+- 2026-07-17: Added validation for null entries inside import rows so `rows = [null]` returns `400 Bad Request` with a row-level error instead of dereferencing the row.
 - 2026-07-17: Asserting the missing-product validation response body in import integration tests.
 - 2026-07-17: Eliminated the products endpoint N+1 offer loading query and added product service/API regression tests.
 
@@ -18,6 +22,7 @@
 - 2026-07-16: Required explicit EF Core table names and added `ToTable(...)` to current entity configurations.
 - 2026-07-16: Moved EF Core entity mapping and seed data into `Data/Configurations` with `IEntityTypeConfiguration<T>`.
 - 2026-07-16: Added project agent rules, documentation routing, and initial `docs/` Markdown files.
+- 2026-07-17: Centralized import validation messages in `ImportValidationMessages` so validators and tests do not duplicate literal error text.
 
 ## With More Time
 

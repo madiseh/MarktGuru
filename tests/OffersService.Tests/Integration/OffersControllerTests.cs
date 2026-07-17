@@ -134,4 +134,25 @@ public class OffersControllerTests : IClassFixture<TestWebApplicationFactory>
         Assert.True(errors.TryGetProperty("rows", out var rowErrors));
         Assert.Contains(rowErrors.EnumerateArray(), error => error.GetString() == ImportValidationMessages.RowsRequired);
     }
+
+    [Fact]
+    public async Task ImportOffers_Returns400_WhenRowsContainsNull()
+    {
+        // Arrange
+        var client = _factory.CreateClient();
+        var request = new { rows = new object?[] { null } };
+
+        // Act
+        var response = await client.PostAsJsonAsync("/api/offers/import", request);
+
+        // Assert
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+
+        var body = await response.Content.ReadAsStringAsync();
+        using var json = JsonDocument.Parse(body);
+
+        var errors = json.RootElement.GetProperty("errors");
+        Assert.True(errors.TryGetProperty("rows[0]", out var rowErrors));
+        Assert.Contains(rowErrors.EnumerateArray(), error => error.GetString() == ImportValidationMessages.OfferRowRequired);
+    }
 }
