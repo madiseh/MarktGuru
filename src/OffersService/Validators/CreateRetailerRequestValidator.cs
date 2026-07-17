@@ -21,6 +21,8 @@ public class CreateRetailerRequestValidator : AbstractValidator<CreateRetailerRe
             .Length(2)
             .WithMessage(RetailerValidationMessages.CountryMustBeIsoCode)
             .Matches("^[A-Za-z]{2}$")
+            .WithMessage(RetailerValidationMessages.CountryMustBeIsoCode)
+            .Must(Iso3166Alpha2CountryCodes.Contains)
             .WithMessage(RetailerValidationMessages.CountryMustBeIsoCode);
     }
 }

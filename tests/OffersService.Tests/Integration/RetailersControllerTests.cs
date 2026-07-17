@@ -109,15 +109,18 @@ public class RetailersControllerTests : IClassFixture<TestWebApplicationFactory>
         Assert.Equal((int)HttpStatusCode.Conflict, json.RootElement.GetProperty("status").GetInt32());
     }
 
-    [Fact]
-    public async Task CreateRetailer_Returns400_WhenCountryIsInvalid()
+    [Theory]
+    [InlineData("AUT")]
+    [InlineData("XX")]
+    [InlineData("XK")]
+    public async Task CreateRetailer_Returns400_WhenCountryIsInvalid(string country)
     {
         // Arrange
         var client = _factory.CreateClient();
         var request = new CreateRetailerRequest
         {
             Name = $"Invalid Country Retailer {Guid.NewGuid():N}",
-            Country = "AUT"
+            Country = country
         };
 
         // Act
