@@ -72,12 +72,12 @@ public class OfferService : IOfferService
         // Execute one EF query that returns the unpaged total plus the requested page rows.
         var rows = await filteredOffers
             .GroupBy(_ => 1)
-            .Select(group => new { TotalCount = group.Count() })
+            .Select(group => new { Total = group.Count() })
             .SelectMany(
                 count => pageQuery.DefaultIfEmpty(),
                 (count, item) => new OfferListQueryRow
                 {
-                    TotalCount = count.TotalCount,
+                    Total = count.Total,
                     Id = item == null ? null : item.Id,
                     ProductId = item == null ? null : item.ProductId,
                     ProductName = item == null ? null : item.ProductName,
@@ -90,7 +90,7 @@ public class OfferService : IOfferService
                 })
             .ToListAsync();
 
-        var totalCount = rows.FirstOrDefault()?.TotalCount ?? 0;
+        var total = rows.FirstOrDefault()?.Total ?? 0;
 
         // Map the in-memory query rows to the public DTO; this does not hit the database.
         var items = rows
@@ -107,7 +107,7 @@ public class OfferService : IOfferService
                 GetEffectiveStatus(row.Status!.Value, row.ValidFrom.Value, row.ValidTo.Value, now)))
             .ToList();
 
-        return PagedList<OfferListItemDto>.Create(items, request.Page, request.PageSize, totalCount);
+        return PagedList<OfferListItemDto>.Create(items, request.Page, request.PageSize, total);
     }
 
     /// <summary>
@@ -166,7 +166,7 @@ public class OfferService : IOfferService
     /// </summary>
     private sealed class OfferListQueryRow
     {
-        public int TotalCount { get; set; }
+        public int Total { get; set; }
         public int? Id { get; set; }
         public int? ProductId { get; set; }
         public string? ProductName { get; set; }

@@ -75,7 +75,7 @@ public class OffersControllerTests : IClassFixture<TestWebApplicationFactory>
     [InlineData("?page=2&pageSize=1", 2, 2, 1, false, true)]
     public async Task GetOffers_ReturnsExpectedPaginationMetadata(
         string queryString,
-        int expectedTotalCount,
+        int expectedTotal,
         int expectedPage,
         int expectedPageSize,
         bool expectedHasNextPage,
@@ -93,7 +93,7 @@ public class OffersControllerTests : IClassFixture<TestWebApplicationFactory>
         var body = await response.Content.ReadAsStringAsync();
         using var json = JsonDocument.Parse(body);
 
-        Assert.Equal(expectedTotalCount, json.RootElement.GetProperty(PagedListProperty.TotalCount).GetInt32());
+        Assert.Equal(expectedTotal, json.RootElement.GetProperty(PagedListProperty.Total).GetInt32());
         Assert.Equal(expectedPage, json.RootElement.GetProperty(PagedListProperty.Page).GetInt32());
         Assert.Equal(expectedPageSize, json.RootElement.GetProperty(PagedListProperty.PageSize).GetInt32());
         Assert.Equal(expectedHasNextPage, json.RootElement.GetProperty(PagedListProperty.HasNextPage).GetBoolean());
@@ -116,7 +116,7 @@ public class OffersControllerTests : IClassFixture<TestWebApplicationFactory>
         using var json = JsonDocument.Parse(body);
 
         Assert.Empty(GetOfferIds(json.RootElement));
-        Assert.Equal(0, json.RootElement.GetProperty(PagedListProperty.TotalCount).GetInt32());
+        Assert.Equal(0, json.RootElement.GetProperty(PagedListProperty.Total).GetInt32());
         Assert.Equal(1, json.RootElement.GetProperty(PagedListProperty.Page).GetInt32());
         Assert.Equal(20, json.RootElement.GetProperty(PagedListProperty.PageSize).GetInt32());
         Assert.False(json.RootElement.GetProperty(PagedListProperty.HasNextPage).GetBoolean());

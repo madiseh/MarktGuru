@@ -15,6 +15,7 @@
 - 2026-07-17: Added validated `GET /api/offers` listing with pagination, filtering, and integration coverage for invalid query values.
 - 2026-07-17: Reworked `GET /api/offers` pagination to return page rows and the unpaged total in one database command, and tightened command-count coverage to require one round-trip.
 - 2026-07-17: Moved repeated UTC `DateTime` kind normalization into a shared `DateTimeExtensions.EnsureUtc` helper.
+- 2026-07-17: Matched the offer-list response contract by renaming the pagination total property to `Total`.
 - 2026-07-17: Added `GET /api/retailers/{id}/stats` with route id validation, active-retailer 404 behavior, single-query active-offer aggregates, and unit/integration coverage.
 - 2026-07-17: Added `POST /api/retailers` with centralized validation, duplicate-name conflict handling, `201 Created` responses, and integration coverage for success, duplicate names, and invalid country codes.
 

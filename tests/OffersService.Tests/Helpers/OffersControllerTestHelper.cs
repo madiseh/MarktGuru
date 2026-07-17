@@ -65,7 +65,7 @@ public static class OffersControllerTestHelper
         public static readonly string Items = ToJsonPropertyName(nameof(PagedList<OfferListItemDto>.Items));
         public static readonly string Page = ToJsonPropertyName(nameof(PagedList<OfferListItemDto>.Page));
         public static readonly string PageSize = ToJsonPropertyName(nameof(PagedList<OfferListItemDto>.PageSize));
-        public static readonly string TotalCount = ToJsonPropertyName(nameof(PagedList<OfferListItemDto>.TotalCount));
+        public static readonly string Total = ToJsonPropertyName(nameof(PagedList<OfferListItemDto>.Total));
         public static readonly string HasNextPage = ToJsonPropertyName(nameof(PagedList<OfferListItemDto>.HasNextPage));
         public static readonly string HasPreviousPage = ToJsonPropertyName(nameof(PagedList<OfferListItemDto>.HasPreviousPage));
 
