@@ -33,6 +33,11 @@ rules validate product ID, price, and validity dates. Request-level rules check
 that referenced products exist and return structured `400 Bad Request` problem
 details when validation fails.
 
+Validator error messages must be centralized in a focused message catalog next
+to the validator, for example `ImportValidationMessages` in
+`src/OffersService/Validators`. Validators and tests should reference those
+constants or factory methods instead of repeating literal error strings inline.
+
 ## Data Model
 
 Current seeded model:

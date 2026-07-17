@@ -12,7 +12,7 @@ public class ImportRequestValidator : AbstractValidator<ImportRequest>
     {
         RuleFor(request => request.Rows)
             .NotNull()
-            .WithMessage("Rows is required.");
+            .WithMessage(ImportValidationMessages.RowsRequired);
 
         RuleForEach(request => request.Rows)
             .SetValidator(offerRowValidator)
@@ -51,7 +51,7 @@ public class ImportRequestValidator : AbstractValidator<ImportRequest>
                 {
                     validationContext.AddFailure(
                         nameof(OfferRow.ProductId),
-                        $"ProductId(s) do not exist: {string.Join(", ", missingProductIds)}");
+                        ImportValidationMessages.ProductIdsDoNotExist(missingProductIds));
                 }
             });
     }

@@ -3,6 +3,7 @@ using System.Net.Http.Json;
 using System.Text.Json;
 using OffersService.DTOs;
 using OffersService.Tests.Helpers;
+using OffersService.Validators;
 using Xunit;
 
 namespace OffersService.Tests.Integration;
@@ -110,7 +111,7 @@ public class OffersControllerTests : IClassFixture<TestWebApplicationFactory>
         Assert.True(errors.TryGetProperty("productid", out var productIdErrors));
         Assert.Contains(
             productIdErrors.EnumerateArray(),
-            error => error.GetString() == $"ProductId(s) do not exist: {missingProductId}");
+            error => error.GetString() == ImportValidationMessages.ProductIdsDoNotExist(new[] { missingProductId }));
     }
 
     [Fact]
@@ -131,6 +132,6 @@ public class OffersControllerTests : IClassFixture<TestWebApplicationFactory>
 
         var errors = json.RootElement.GetProperty("errors");
         Assert.True(errors.TryGetProperty("rows", out var rowErrors));
-        Assert.Contains(rowErrors.EnumerateArray(), error => error.GetString() == "Rows is required.");
+        Assert.Contains(rowErrors.EnumerateArray(), error => error.GetString() == ImportValidationMessages.RowsRequired);
     }
 }
