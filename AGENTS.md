@@ -38,3 +38,7 @@ rtk powershell -NoProfile -Command "Get-ChildItem -Force"
 - Every EF Core entity configuration must explicitly set the table name with `ToTable(...)` using constants from `TableNames`.
 - Keep FluentValidation error messages centralized in focused message catalog classes under `src/OffersService/Validators`; do not duplicate literal validator messages inline in validators or tests.
 - Keep feature-specific service registrations and middleware setup behind focused extension methods in `src/OffersService/IOC`.
+
+## Architecture Notes
+
+- Retailers are part of the seeded EF Core data model. `Offer.RetailerId` is nullable and uses `DeleteBehavior.SetNull`.

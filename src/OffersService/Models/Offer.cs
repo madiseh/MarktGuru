@@ -21,4 +21,8 @@ public class Offer
     public OfferStatus Status { get; set; }
 
     public DateTime CreatedAt { get; set; }
+
+    public int? RetailerId { get; set; }
+
+    public Retailer? Retailer { get; set; }
 }

@@ -73,10 +73,10 @@ tests/OffersService.Tests/
 | `POST` | `/api/offers/import` | Bulk-imports offers from a JSON payload |
 | `GET` | `/api/products` | Returns products with their associated offers |
 
-## Planned README Tasks
+## README Tasks
 
-- Fix existing correctness and reliability issues.
-- Add `Retailers` schema and migration.
+- Fixed existing correctness and reliability issues.
+- Added `Retailers` schema and migration.
 - Add offer listing, retailer stats, and retailer creation endpoints.
 - Add an hourly Hangfire `OfferExpiryJob`.
 - Expand tests for bug fixes, new endpoints, and the expiry job.

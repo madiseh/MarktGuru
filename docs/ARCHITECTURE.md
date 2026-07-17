@@ -43,15 +43,11 @@ constants or factory methods instead of repeating literal error strings inline.
 Current seeded model:
 
 - `Product`: product records.
-- `Offer`: offer records with price, validity window, and status.
+- `Retailer`: retailer master data with unique name, country, active flag, and creation time.
+- `Offer`: offer records with price, validity window, status, and optional retailer relationship.
 - `OfferStatus`: `Pending`, `Active`, `Expired`.
 
 Entity mapping and seed data are defined in `src/OffersService/Data/Configurations` using EF Core `IEntityTypeConfiguration<T>` classes and loaded from `AppDbContext.OnModelCreating`. Every entity configuration must explicitly set the table name with `ToTable(...)`, and table names must come from `src/OffersService/Data/TableNames.cs`.
-
-Planned model extension from `README.md`:
-
-- `Retailer`: retailer master data with unique name, country, active flag, and creation time.
-- `Offer.RetailerId`: nullable foreign key to `Retailer`.
 
 ## Query Guidelines
 

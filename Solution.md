@@ -15,6 +15,10 @@
 
 ## Design Decisions
 
+- 2026-07-17: Added the `Retailers` table with required unique names, two-character country codes, active status, creation time, and seeded `Rewe` and `Billa` records.
+- 2026-07-17: Added nullable `Offer.RetailerId` support with an EF Core navigation to `Retailer`, an index on `Offers.RetailerId`, and `SetNull` delete behavior so offers are retained if a retailer is removed.
+- 2026-07-17: Updated existing seeded offers to reference the seeded retailers while keeping `RetailerId` nullable as required by the exercise.
+- 2026-07-17: Kept retailer mapping in `RetailerConfiguration` and table naming in `TableNames` to match the project's configuration-based EF Core structure.
 - 2026-07-16: Added centralized problem-details exception handlers for validation and unexpected application errors, registered through `src/OffersService/IOC/ExceptionHandling.cs`.
 - 2026-07-16: Switched integration tests to SQLite in-memory with foreign keys enabled so relational constraints are exercised.
 - 2026-07-16: Added `src/OffersService/IOC/Services.cs` for application service dependency injection registration.

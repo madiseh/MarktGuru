@@ -11,6 +11,7 @@ public class AppDbContext : DbContext
 
     public DbSet<Product> Products => Set<Product>();
     public DbSet<Offer> Offers => Set<Offer>();
+    public DbSet<Retailer> Retailers => Set<Retailer>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
