@@ -31,10 +31,10 @@ public class OfferImportService : IOfferImportService
             await _context.Offers.AddAsync(new Offer
             {
                 ProductId = row.ProductId,
-                Price     = row.Price,
+                Price = row.Price,
                 ValidFrom = row.ValidFrom,
-                ValidTo   = row.ValidTo,
-                Status    = OfferStatus.Active,
+                ValidTo = row.ValidTo,
+                Status = OfferStatus.Active,
                 CreatedAt = DateTime.UtcNow
             });
         }

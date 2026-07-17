@@ -25,16 +25,16 @@ public class ProductServiceTests
         context.Products.AddRange(
             new Product
             {
-                Id        = 1,
-                Name      = "Whole Milk 1L",
-                Category  = "Dairy",
+                Id = 1,
+                Name = "Whole Milk 1L",
+                Category = "Dairy",
                 CreatedAt = DateTime.UtcNow
             },
             new Product
             {
-                Id        = 2,
-                Name      = "Sourdough Bread 500g",
-                Category  = "Bakery",
+                Id = 2,
+                Name = "Sourdough Bread 500g",
+                Category = "Bakery",
                 CreatedAt = DateTime.UtcNow
             }
         );
@@ -42,22 +42,22 @@ public class ProductServiceTests
         context.Offers.AddRange(
             new Offer
             {
-                Id        = 1,
+                Id = 1,
                 ProductId = 1,
-                Price     = 0.99m,
+                Price = 0.99m,
                 ValidFrom = DateTime.UtcNow.AddDays(-1),
-                ValidTo   = DateTime.UtcNow.AddDays(1),
-                Status    = OfferStatus.Active,
+                ValidTo = DateTime.UtcNow.AddDays(1),
+                Status = OfferStatus.Active,
                 CreatedAt = DateTime.UtcNow
             },
             new Offer
             {
-                Id        = 2,
+                Id = 2,
                 ProductId = 2,
-                Price     = 1.49m,
+                Price = 1.49m,
                 ValidFrom = DateTime.UtcNow.AddDays(-1),
-                ValidTo   = DateTime.UtcNow.AddDays(1),
-                Status    = OfferStatus.Active,
+                ValidTo = DateTime.UtcNow.AddDays(1),
+                Status = OfferStatus.Active,
                 CreatedAt = DateTime.UtcNow
             }
         );

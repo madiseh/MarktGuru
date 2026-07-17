@@ -24,9 +24,9 @@ public class OfferServiceTests
 
         var product = new Product
         {
-            Id        = 1,
-            Name      = "Test Product",
-            Category  = "Test",
+            Id = 1,
+            Name = "Test Product",
+            Category = "Test",
             CreatedAt = DateTime.UtcNow
         };
         context.Products.Add(product);
@@ -34,22 +34,22 @@ public class OfferServiceTests
         context.Offers.AddRange(
             new Offer
             {
-                Id        = 1,
+                Id = 1,
                 ProductId = 1,
-                Price     = 1.00m,
+                Price = 1.00m,
                 ValidFrom = DateTime.UtcNow.AddDays(-10),
-                ValidTo   = DateTime.UtcNow.AddDays(-1),   // expired
-                Status    = OfferStatus.Active,
+                ValidTo = DateTime.UtcNow.AddDays(-1),   // expired
+                Status = OfferStatus.Active,
                 CreatedAt = DateTime.UtcNow
             },
             new Offer
             {
-                Id        = 2,
+                Id = 2,
                 ProductId = 1,
-                Price     = 2.00m,
+                Price = 2.00m,
                 ValidFrom = DateTime.UtcNow.AddDays(-1),
-                ValidTo   = DateTime.UtcNow.AddDays(10),   // valid
-                Status    = OfferStatus.Active,
+                ValidTo = DateTime.UtcNow.AddDays(10),   // valid
+                Status = OfferStatus.Active,
                 CreatedAt = DateTime.UtcNow
             }
         );
@@ -73,31 +73,31 @@ public class OfferServiceTests
 
         context.Products.Add(new Product
         {
-            Id        = 1,
-            Name      = "Test Product",
-            Category  = "Test",
+            Id = 1,
+            Name = "Test Product",
+            Category = "Test",
             CreatedAt = DateTime.UtcNow
         });
 
         context.Offers.AddRange(
             new Offer
             {
-                Id        = 1,
+                Id = 1,
                 ProductId = 1,
-                Price     = 1.00m,
+                Price = 1.00m,
                 ValidFrom = DateTime.UtcNow.AddDays(-1),
-                ValidTo   = DateTime.UtcNow.AddDays(1),
-                Status    = OfferStatus.Active,
+                ValidTo = DateTime.UtcNow.AddDays(1),
+                Status = OfferStatus.Active,
                 CreatedAt = DateTime.UtcNow
             },
             new Offer
             {
-                Id        = 2,
+                Id = 2,
                 ProductId = 1,
-                Price     = 2.00m,
+                Price = 2.00m,
                 ValidFrom = DateTime.UtcNow.AddDays(1),
-                ValidTo   = DateTime.UtcNow.AddDays(10),
-                Status    = OfferStatus.Active,
+                ValidTo = DateTime.UtcNow.AddDays(10),
+                Status = OfferStatus.Active,
                 CreatedAt = DateTime.UtcNow
             }
         );
@@ -121,41 +121,41 @@ public class OfferServiceTests
 
         context.Products.Add(new Product
         {
-            Id        = 1,
-            Name      = "Test Product",
-            Category  = "Test",
+            Id = 1,
+            Name = "Test Product",
+            Category = "Test",
             CreatedAt = DateTime.UtcNow
         });
 
         context.Offers.AddRange(
             new Offer
             {
-                Id        = 1,
+                Id = 1,
                 ProductId = 1,
-                Price     = 1.00m,
+                Price = 1.00m,
                 ValidFrom = DateTime.UtcNow.AddDays(-1),
-                ValidTo   = DateTime.UtcNow.AddDays(1),
-                Status    = OfferStatus.Active,
+                ValidTo = DateTime.UtcNow.AddDays(1),
+                Status = OfferStatus.Active,
                 CreatedAt = DateTime.UtcNow
             },
             new Offer
             {
-                Id        = 2,
+                Id = 2,
                 ProductId = 1,
-                Price     = 2.00m,
+                Price = 2.00m,
                 ValidFrom = DateTime.UtcNow.AddDays(-1),
-                ValidTo   = DateTime.UtcNow.AddDays(1),
-                Status    = OfferStatus.Pending,
+                ValidTo = DateTime.UtcNow.AddDays(1),
+                Status = OfferStatus.Pending,
                 CreatedAt = DateTime.UtcNow
             },
             new Offer
             {
-                Id        = 3,
+                Id = 3,
                 ProductId = 1,
-                Price     = 3.00m,
+                Price = 3.00m,
                 ValidFrom = DateTime.UtcNow.AddDays(-1),
-                ValidTo   = DateTime.UtcNow.AddDays(1),
-                Status    = OfferStatus.Expired,
+                ValidTo = DateTime.UtcNow.AddDays(1),
+                Status = OfferStatus.Expired,
                 CreatedAt = DateTime.UtcNow
             }
         );
@@ -192,14 +192,14 @@ public class OfferServiceTests
         await using var context = CreateContext();
 
         context.Products.AddRange(
-            new Product { Id = 1, Name = "Whole Milk 1L",        Category = "Dairy",     CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc) },
-            new Product { Id = 2, Name = "Sourdough Bread 500g", Category = "Bakery",    CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc) },
-            new Product { Id = 3, Name = "Orange Juice 1L",      Category = "Beverages", CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc) }
+            new Product { Id = 1, Name = "Whole Milk 1L", Category = "Dairy", CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc) },
+            new Product { Id = 2, Name = "Sourdough Bread 500g", Category = "Bakery", CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc) },
+            new Product { Id = 3, Name = "Orange Juice 1L", Category = "Beverages", CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc) }
         );
 
         context.Offers.AddRange(
             new Offer { Id = 1, ProductId = 1, Price = 0.99m, ValidFrom = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc), ValidTo = new DateTime(2099, 12, 31, 0, 0, 0, DateTimeKind.Utc), Status = OfferStatus.Active, CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc) },
-            new Offer { Id = 2, ProductId = 2, Price = 1.49m, ValidFrom = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc), ValidTo = new DateTime(2024, 1,  2, 0, 0, 0, DateTimeKind.Utc), Status = OfferStatus.Active, CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc) },
+            new Offer { Id = 2, ProductId = 2, Price = 1.49m, ValidFrom = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc), ValidTo = new DateTime(2024, 1, 2, 0, 0, 0, DateTimeKind.Utc), Status = OfferStatus.Active, CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc) },
             new Offer { Id = 3, ProductId = 3, Price = 1.29m, ValidFrom = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc), ValidTo = new DateTime(2099, 12, 31, 0, 0, 0, DateTimeKind.Utc), Status = OfferStatus.Active, CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc) }
         );
         await context.SaveChangesAsync();

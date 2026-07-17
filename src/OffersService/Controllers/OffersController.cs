@@ -13,7 +13,7 @@ public class OffersController : ControllerBase
 
     public OffersController(IOfferService offerService, IOfferImportService importService)
     {
-        _offerService  = offerService;
+        _offerService = offerService;
         _importService = importService;
     }
 
