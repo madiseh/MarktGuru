@@ -22,7 +22,8 @@ public class OffersControllerTests : IClassFixture<TestWebApplicationFactory>
     #region Performance
 
     [Theory]
-    [InlineData("/api/offers?page=1&pageSize=1", 2)]
+    [InlineData("/api/offers?page=1&pageSize=1", 1)]
+    [InlineData("/api/offers?productId=9999", 1)]
     public async Task OffersApi_ExecutesExpectedDatabaseCommandCount(string url, int expectedCommandCount)
     {
         // Arrange
@@ -97,6 +98,29 @@ public class OffersControllerTests : IClassFixture<TestWebApplicationFactory>
         Assert.Equal(expectedPageSize, json.RootElement.GetProperty(PagedListProperty.PageSize).GetInt32());
         Assert.Equal(expectedHasNextPage, json.RootElement.GetProperty(PagedListProperty.HasNextPage).GetBoolean());
         Assert.Equal(expectedHasPreviousPage, json.RootElement.GetProperty(PagedListProperty.HasPreviousPage).GetBoolean());
+    }
+
+    [Fact]
+    public async Task GetOffers_ReturnsEmptyPage_WhenNoOffersMatch()
+    {
+        // Arrange
+        var client = _factory.CreateClient();
+
+        // Act
+        var response = await client.GetAsync("/api/offers?productId=9999");
+
+        // Assert
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        var body = await response.Content.ReadAsStringAsync();
+        using var json = JsonDocument.Parse(body);
+
+        Assert.Empty(GetOfferIds(json.RootElement));
+        Assert.Equal(0, json.RootElement.GetProperty(PagedListProperty.TotalCount).GetInt32());
+        Assert.Equal(1, json.RootElement.GetProperty(PagedListProperty.Page).GetInt32());
+        Assert.Equal(20, json.RootElement.GetProperty(PagedListProperty.PageSize).GetInt32());
+        Assert.False(json.RootElement.GetProperty(PagedListProperty.HasNextPage).GetBoolean());
+        Assert.False(json.RootElement.GetProperty(PagedListProperty.HasPreviousPage).GetBoolean());
     }
 
     [Theory]

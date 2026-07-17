@@ -46,10 +46,11 @@ with `OfferListRequestValidator` before calling `IOfferService`. The endpoint
 returns `PagedList<OfferListItemDto>` and supports filtering by product,
 retailer, and list status (`active`, `expired`, or `all`).
 
-The listing query projects directly to response data and uses the reusable
-`PagedList<T>` helper to compute `TotalCount`, page metadata, `HasNextPage`, and
-`HasPreviousPage`. The total is computed before pagination and rows without a
-retailer are excluded from the retailer-aware listing endpoint.
+The listing query uses EF Core LINQ in `OfferService` to return both the
+requested page and the unpaged total count in a single database round-trip.
+`PagedList<T>` is used as the response wrapper for page metadata and navigation
+flags. Rows without a retailer are excluded from the retailer-aware listing
+endpoint.
 
 ## Retailer Statistics
 

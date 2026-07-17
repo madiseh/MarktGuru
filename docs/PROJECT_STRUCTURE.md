@@ -38,6 +38,7 @@ src/OffersService/
 |   |-- GlobalExceptionHandler.cs
 |   `-- ValidationExceptionHandler.cs
 |-- Extensions/
+|   |-- DateTimeExtensions.cs
 |   `-- QueryableExtensions.cs
 |-- Models/
 |   |-- Product.cs

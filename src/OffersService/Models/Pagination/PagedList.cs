@@ -19,6 +19,11 @@ public class PagedList<T>
     public bool HasNextPage => Page * PageSize < TotalCount;
     public bool HasPreviousPage => Page > 1;
 
+    public static PagedList<T> Create(IReadOnlyList<T> items, int page, int pageSize, int totalCount)
+    {
+        return new PagedList<T>(items, page, pageSize, totalCount);
+    }
+
     public static async Task<PagedList<T>> CreateAsync(IQueryable<T> query, int page, int pageSize)
     {
         var totalCount = await query.CountAsync();

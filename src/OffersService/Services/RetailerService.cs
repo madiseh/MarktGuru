@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using OffersService.Data;
 using OffersService.DTOs;
+using OffersService.Extensions;
 using OffersService.Models;
 
 namespace OffersService.Services;
@@ -24,7 +25,7 @@ public class RetailerService : IRetailerService
                 retailer.Name,
                 retailer.Country,
                 retailer.IsActive,
-                EnsureUtc(retailer.CreatedAt)))
+                retailer.CreatedAt.EnsureUtc()))
             .FirstOrDefaultAsync();
     }
 
@@ -58,7 +59,7 @@ public class RetailerService : IRetailerService
             retailer.Name,
             retailer.Country,
             retailer.IsActive,
-            EnsureUtc(retailer.CreatedAt));
+            retailer.CreatedAt.EnsureUtc());
     }
 
     public async Task<RetailerStatsDto?> GetStatsAsync(int id)
@@ -127,13 +128,6 @@ public class RetailerService : IRetailerService
                     stats.MostRecentActiveOffer.Id,
                     stats.MostRecentActiveOffer.ProductName,
                     Convert.ToDecimal(stats.MostRecentActiveOffer.Price),
-                    EnsureUtc(stats.MostRecentActiveOffer.ValidTo)));
-    }
-
-    private static DateTime EnsureUtc(DateTime dateTime)
-    {
-        return dateTime.Kind == DateTimeKind.Utc
-            ? dateTime
-            : DateTime.SpecifyKind(dateTime, DateTimeKind.Utc);
+                    stats.MostRecentActiveOffer.ValidTo.EnsureUtc()));
     }
 }

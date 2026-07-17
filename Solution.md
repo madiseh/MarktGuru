@@ -13,6 +13,8 @@
 - 2026-07-17: Asserting the missing-product validation response body in import integration tests.
 - 2026-07-17: Eliminated the products endpoint N+1 offer loading query and added product service/API regression tests.
 - 2026-07-17: Added validated `GET /api/offers` listing with pagination, filtering, and integration coverage for invalid query values.
+- 2026-07-17: Reworked `GET /api/offers` pagination to return page rows and the unpaged total in one database command, and tightened command-count coverage to require one round-trip.
+- 2026-07-17: Moved repeated UTC `DateTime` kind normalization into a shared `DateTimeExtensions.EnsureUtc` helper.
 - 2026-07-17: Added `GET /api/retailers/{id}/stats` with route id validation, active-retailer 404 behavior, single-query active-offer aggregates, and unit/integration coverage.
 - 2026-07-17: Added `POST /api/retailers` with centralized validation, duplicate-name conflict handling, `201 Created` responses, and integration coverage for success, duplicate names, and invalid country codes.
 
@@ -32,6 +34,7 @@
 - 2026-07-17: Centralized import validation messages in `ImportValidationMessages` so validators and tests do not duplicate literal error text.
 - 2026-07-17: Registered offer-list validation through `src/OffersService/IOC/Services.cs` to preserve the current application composition pattern.
 - 2026-07-17: Introduced a reusable `PagedList<T>` response model with page metadata and navigation flags for offer listing responses.
+- 2026-07-17: Kept offer listing in `OfferService` with EF Core LINQ only, avoiding hand-written SQL while the list endpoint still uses one database command.
 - 2026-07-17: Registered retailer stats services and validators through `src/OffersService/IOC/Services.cs` to keep application composition centralized.
 - 2026-07-17: Added `GET /api/retailers/{id}` so retailer creation responses can point the `Location` header at a concrete retailer resource.
 
