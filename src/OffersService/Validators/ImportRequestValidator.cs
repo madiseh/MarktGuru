@@ -10,12 +10,22 @@ public class ImportRequestValidator : AbstractValidator<ImportRequest>
 {
     public ImportRequestValidator(AppDbContext context, IValidator<OfferRow> offerRowValidator)
     {
+        RuleFor(request => request.Rows)
+            .NotNull()
+            .WithMessage("Rows is required.");
+
         RuleForEach(request => request.Rows)
-            .SetValidator(offerRowValidator);
+            .SetValidator(offerRowValidator)
+            .When(request => request.Rows is not null);
 
         RuleFor(request => request.Rows)
             .CustomAsync(async (rows, validationContext, cancellationToken) =>
             {
+                if (rows is null)
+                {
+                    return;
+                }
+
                 var productIds = rows
                     .Select(row => row.ProductId)
                     .Where(productId => productId > 0)

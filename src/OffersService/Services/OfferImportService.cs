@@ -16,9 +16,9 @@ public class OfferImportService : IOfferImportService
         _importRequestValidator = importRequestValidator;
     }
 
-    public async Task<int> ImportAsync(IEnumerable<OfferRow> rows)
+    public async Task<int> ImportAsync(IEnumerable<OfferRow>? rows)
     {
-        var offerRows = rows.ToList();
+        var offerRows = rows?.ToList();
 
         var validationResult = await _importRequestValidator.ValidateAsync(new ImportRequest { Rows = offerRows });
         if (!validationResult.IsValid)
@@ -26,7 +26,7 @@ public class OfferImportService : IOfferImportService
             throw new ValidationException(validationResult.Errors);
         }
 
-        foreach (var row in offerRows)
+        foreach (var row in offerRows!)
         {
             await _context.Offers.AddAsync(new Offer
             {
