@@ -6,6 +6,7 @@
 - 2026-07-16: Returned the imported offer row count from the import service and `POST /api/offers/import` response body.
 - 2026-07-16: test fix so active-offer seed expectations are computed dynamically.
 - 2026-07-16: Added FluentValidation import validation so invalid offer rows and missing product IDs return `400 Bad Request` before persistence.
+- 2026-07-17: Asserting the missing-product validation response body in import integration tests.
 
 ## Design Decisions
 
