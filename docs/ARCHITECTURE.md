@@ -49,8 +49,8 @@ retailer, and list status (`active`, `expired`, or `all`).
 The listing query uses EF Core LINQ in `OfferService` to return both the
 requested page and the unpaged total count in a single database round-trip.
 `PagedList<T>` is used as the response wrapper for page metadata and navigation
-flags. Rows without a retailer are excluded from the retailer-aware listing
-endpoint.
+flags. Offers without a retailer are included in the listing and return null
+`retailerId` and `retailerName` values.
 
 ## Retailer Statistics
 

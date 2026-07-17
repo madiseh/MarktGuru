@@ -43,5 +43,6 @@ rtk powershell -NoProfile -Command "Get-ChildItem -Force"
 
 - Retailers are part of the seeded EF Core data model. `Offer.RetailerId` is nullable and uses `DeleteBehavior.SetNull`.
 - `GET /api/offers` uses `OfferListRequestValidator` and returns a `PagedList<OfferListItemDto>` with `Total`, page metadata, and navigation flags from one EF Core query.
+- `GET /api/offers` includes offers without a retailer and returns null retailer fields for those rows.
 - `GET /api/retailers/{id}/stats` uses `RetailerStatsRequestValidator` and `IRetailerService` to return active-retailer aggregate stats in one EF Core query.
 - `POST /api/retailers` uses `CreateRetailerRequestValidator`, returns `201 Created` with a `Location` header, and returns `409 Conflict` for duplicate retailer names.

@@ -2,7 +2,9 @@ using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
 using Microsoft.Extensions.DependencyInjection;
+using OffersService.Data;
 using OffersService.DTOs;
+using OffersService.Models;
 using OffersService.Tests.Helpers;
 using OffersService.Validators;
 using Xunit;
@@ -121,6 +123,39 @@ public class OffersControllerTests : IClassFixture<TestWebApplicationFactory>
         Assert.Equal(20, json.RootElement.GetProperty(PagedListProperty.PageSize).GetInt32());
         Assert.False(json.RootElement.GetProperty(PagedListProperty.HasNextPage).GetBoolean());
         Assert.False(json.RootElement.GetProperty(PagedListProperty.HasPreviousPage).GetBoolean());
+    }
+
+    [Fact]
+    public async Task GetOffers_IncludesOffersWithoutRetailer()
+    {
+        // Arrange
+        var client = _factory.CreateClient();
+        const int productId = 9101;
+        const int offerId = 9101;
+        await AddActiveOfferWithoutRetailerAsync(productId, offerId);
+
+        try
+        {
+            // Act
+            var response = await client.GetAsync($"/api/offers?productId={productId}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+            var body = await response.Content.ReadAsStringAsync();
+            using var json = JsonDocument.Parse(body);
+
+            var item = Assert.Single(json.RootElement.GetProperty(PagedListProperty.Items).EnumerateArray());
+            Assert.Equal(offerId, item.GetProperty("id").GetInt32());
+            Assert.Equal(productId, item.GetProperty("productId").GetInt32());
+            Assert.Equal(JsonValueKind.Null, item.GetProperty("retailerId").ValueKind);
+            Assert.Equal(JsonValueKind.Null, item.GetProperty("retailerName").ValueKind);
+            Assert.Equal(1, json.RootElement.GetProperty(PagedListProperty.Total).GetInt32());
+        }
+        finally
+        {
+            await RemoveOfferAndProductAsync(productId, offerId);
+        }
     }
 
     [Theory]
@@ -300,4 +335,53 @@ public class OffersControllerTests : IClassFixture<TestWebApplicationFactory>
     }
 
     #endregion POST /api/offers/import
+
+    private async Task AddActiveOfferWithoutRetailerAsync(int productId, int offerId)
+    {
+        using var scope = _factory.Services.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        var now = DateTime.UtcNow;
+
+        context.Products.Add(new Product
+        {
+            Id = productId,
+            Name = $"Retailerless Product {productId}",
+            Category = "Test",
+            CreatedAt = now
+        });
+
+        context.Offers.Add(new Offer
+        {
+            Id = offerId,
+            ProductId = productId,
+            RetailerId = null,
+            Price = 3.49m,
+            ValidFrom = now.AddDays(-1),
+            ValidTo = now.AddDays(7),
+            Status = OfferStatus.Active,
+            CreatedAt = now
+        });
+
+        await context.SaveChangesAsync();
+    }
+
+    private async Task RemoveOfferAndProductAsync(int productId, int offerId)
+    {
+        using var scope = _factory.Services.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+
+        var offer = await context.Offers.FindAsync(offerId);
+        if (offer is not null)
+        {
+            context.Offers.Remove(offer);
+        }
+
+        var product = await context.Products.FindAsync(productId);
+        if (product is not null)
+        {
+            context.Products.Remove(product);
+        }
+
+        await context.SaveChangesAsync();
+    }
 }

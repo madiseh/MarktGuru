@@ -62,7 +62,7 @@ public class OfferService : IOfferService
                 ProductId = offer.ProductId,
                 ProductName = offer.Product.Name,
                 RetailerId = offer.RetailerId,
-                RetailerName = offer.Retailer!.Name,
+                RetailerName = offer.Retailer == null ? null : offer.Retailer.Name,
                 Price = offer.Price,
                 ValidFrom = offer.ValidFrom,
                 ValidTo = offer.ValidTo,
@@ -99,8 +99,8 @@ public class OfferService : IOfferService
                 row.Id!.Value,
                 row.ProductId!.Value,
                 row.ProductName!,
-                row.RetailerId!.Value,
-                row.RetailerName!,
+                row.RetailerId,
+                row.RetailerName,
                 row.Price!.Value,
                 row.ValidFrom!.Value.EnsureUtc(),
                 row.ValidTo!.Value.EnsureUtc(),
@@ -111,13 +111,12 @@ public class OfferService : IOfferService
     }
 
     /// <summary>
-    /// Applies retailer-aware offer list filters without executing the query.
+    /// Applies offer list filters without executing the query.
     /// </summary>
     private IQueryable<Offer> BuildFilteredOffersQuery(OfferListRequest request, DateTime now)
     {
         var filteredOffers = _context.Offers
-            .AsNoTracking()
-            .Where(offer => offer.RetailerId != null);
+            .AsNoTracking();
 
         if (request.ProductId is not null)
         {

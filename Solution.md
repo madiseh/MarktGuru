@@ -19,6 +19,7 @@
 - 2026-07-17: Added `GET /api/retailers/{id}/stats` with route id validation, active-retailer 404 behavior, single-query active-offer aggregates, and unit/integration coverage.
 - 2026-07-17: Added `POST /api/retailers` with centralized validation, duplicate-name conflict handling, `201 Created` responses, and integration coverage for success, duplicate names, and invalid country codes.
 - 2026-07-17: Tightened retailer country validation from two alphabetic characters to membership in officially assigned ISO 3166-1 alpha-2 country codes.
+- 2026-07-17: Updated `GET /api/offers` to include offers without retailers by returning nullable retailer fields instead of filtering those rows out.
 
 ## Design Decisions
 
