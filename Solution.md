@@ -7,6 +7,7 @@
 - 2026-07-16: test fix so active-offer seed expectations are computed dynamically.
 - 2026-07-16: Added FluentValidation import validation so invalid offer rows and missing product IDs return `400 Bad Request` before persistence.
 - 2026-07-17: Asserting the missing-product validation response body in import integration tests.
+- 2026-07-17: Eliminated the products endpoint N+1 offer loading query and added product service/API regression tests.
 
 ## Design Decisions
 

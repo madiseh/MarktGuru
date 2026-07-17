@@ -54,9 +54,11 @@ src/OffersService/
 ```text
 tests/OffersService.Tests/
 |-- Unit/
-|   `-- OfferServiceTests.cs
+|   |-- OfferServiceTests.cs
+|   `-- ProductServiceTests.cs
 |-- Integration/
-|   `-- OffersControllerTests.cs
+|   |-- OffersControllerTests.cs
+|   `-- ProductsControllerTests.cs
 |-- Helpers/
 |   `-- TestWebApplicationFactory.cs
 `-- OffersService.Tests.csproj
