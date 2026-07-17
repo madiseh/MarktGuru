@@ -92,7 +92,9 @@ tests/OffersService.Tests/
 | `GET` | `/api/offers/{id}` | Returns a single offer by ID |
 | `POST` | `/api/offers/import` | Bulk-imports offers from a JSON payload |
 | `GET` | `/api/products` | Returns products with their associated offers |
+| `GET` | `/api/retailers/{id}` | Returns a single retailer by ID |
 | `GET` | `/api/retailers/{id}/stats` | Returns single-query active-offer statistics for an active retailer |
+| `POST` | `/api/retailers` | Creates a retailer with validation and duplicate-name conflict handling |
 
 ## README Tasks
 

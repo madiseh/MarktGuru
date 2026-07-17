@@ -14,6 +14,53 @@ public class RetailerService : IRetailerService
         _context = context;
     }
 
+    public async Task<RetailerDto?> GetByIdAsync(int id)
+    {
+        return await _context.Retailers
+            .AsNoTracking()
+            .Where(retailer => retailer.Id == id)
+            .Select(retailer => new RetailerDto(
+                retailer.Id,
+                retailer.Name,
+                retailer.Country,
+                retailer.IsActive,
+                EnsureUtc(retailer.CreatedAt)))
+            .FirstOrDefaultAsync();
+    }
+
+    public async Task<RetailerDto?> CreateAsync(CreateRetailerRequest request)
+    {
+        var name = request.Name!.Trim();
+        var country = request.Country!.Trim().ToUpperInvariant();
+        var nameKey = name.ToUpperInvariant();
+
+        var retailerExists = await _context.Retailers
+            .AnyAsync(retailer => retailer.Name.ToUpper() == nameKey);
+
+        if (retailerExists)
+        {
+            return null;
+        }
+
+        var retailer = new Retailer
+        {
+            Name = name,
+            Country = country,
+            IsActive = true,
+            CreatedAt = DateTime.UtcNow
+        };
+
+        _context.Retailers.Add(retailer);
+        await _context.SaveChangesAsync();
+
+        return new RetailerDto(
+            retailer.Id,
+            retailer.Name,
+            retailer.Country,
+            retailer.IsActive,
+            EnsureUtc(retailer.CreatedAt));
+    }
+
     public async Task<RetailerStatsDto?> GetStatsAsync(int id)
     {
         var now = DateTime.UtcNow;

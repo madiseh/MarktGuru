@@ -65,6 +65,14 @@ covered by integration tests that assert successful output, invalid ids,
 missing/inactive retailers, empty active-offer stats, and single database
 round-trip behavior.
 
+## Retailer Creation
+
+`POST /api/retailers` accepts `CreateRetailerRequest`, validates it with
+`CreateRetailerRequestValidator`, and returns `201 Created` with a `Location`
+header pointing to `GET /api/retailers/{id}`. Retailer names are trimmed before
+persistence, country codes are uppercased, and duplicate names return
+`409 Conflict` with a problem-details response.
+
 ## Data Model
 
 Current seeded model:

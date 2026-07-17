@@ -12,13 +12,53 @@ public class RetailersController : ControllerBase
 {
     private readonly IRetailerService _retailerService;
     private readonly IValidator<RetailerStatsRequest> _retailerStatsRequestValidator;
+    private readonly IValidator<CreateRetailerRequest> _createRetailerRequestValidator;
 
     public RetailersController(
         IRetailerService retailerService,
-        IValidator<RetailerStatsRequest> retailerStatsRequestValidator)
+        IValidator<RetailerStatsRequest> retailerStatsRequestValidator,
+        IValidator<CreateRetailerRequest> createRetailerRequestValidator)
     {
         _retailerService = retailerService;
         _retailerStatsRequestValidator = retailerStatsRequestValidator;
+        _createRetailerRequestValidator = createRetailerRequestValidator;
+    }
+
+    [HttpGet("{id:int}", Name = "GetRetailer")]
+    public async Task<ActionResult<RetailerDto>> GetById(int id)
+    {
+        var retailer = await _retailerService.GetByIdAsync(id);
+        if (retailer is null)
+        {
+            return NotFound();
+        }
+
+        return Ok(retailer);
+    }
+
+    [HttpPost]
+    public async Task<ActionResult<RetailerDto>> Create([FromBody] CreateRetailerRequest? request)
+    {
+        request ??= new CreateRetailerRequest();
+
+        var validationResult = await _createRetailerRequestValidator.ValidateAsync(request);
+        if (!validationResult.IsValid)
+        {
+            throw new ValidationException(validationResult.Errors);
+        }
+
+        var retailer = await _retailerService.CreateAsync(request);
+        if (retailer is null)
+        {
+            return Conflict(new ProblemDetails
+            {
+                Title = "Retailer already exists",
+                Detail = RetailerValidationMessages.NameAlreadyExists,
+                Status = StatusCodes.Status409Conflict
+            });
+        }
+
+        return CreatedAtRoute("GetRetailer", new { id = retailer.Id }, retailer);
     }
 
     [HttpGet("{id}/stats", Name = "GetRetailerStats")]

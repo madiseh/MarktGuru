@@ -1,7 +1,9 @@
 using System.Net;
+using System.Net.Http.Json;
 using System.Text.Json;
 using Microsoft.Extensions.DependencyInjection;
 using OffersService.Data;
+using OffersService.DTOs;
 using OffersService.Models;
 using OffersService.Tests.Helpers;
 using OffersService.Validators;
@@ -37,6 +39,98 @@ public class RetailersControllerTests : IClassFixture<TestWebApplicationFactory>
     }
 
     #endregion Performance
+
+    #region POST /api/retailers
+
+    [Fact]
+    public async Task CreateRetailer_Returns201WithLocationHeaderAndResponseBody()
+    {
+        // Arrange
+        var client = _factory.CreateClient();
+        var retailerName = $"Test Retailer {Guid.NewGuid():N}";
+        var request = new CreateRetailerRequest
+        {
+            Name = $" {retailerName} ",
+            Country = "at"
+        };
+
+        // Act
+        var response = await client.PostAsJsonAsync("/api/retailers", request);
+
+        // Assert
+        Assert.Equal(HttpStatusCode.Created, response.StatusCode);
+        Assert.NotNull(response.Headers.Location);
+
+        var body = await response.Content.ReadAsStringAsync();
+        using var json = JsonDocument.Parse(body);
+        var root = json.RootElement;
+
+        var retailerId = root.GetProperty("id").GetInt32();
+        Assert.True(retailerId > 0);
+        Assert.Equal(retailerName, root.GetProperty("name").GetString());
+        Assert.Equal("AT", root.GetProperty("country").GetString());
+        Assert.True(root.GetProperty("isActive").GetBoolean());
+        Assert.EndsWith("Z", root.GetProperty("createdAt").GetString());
+        Assert.EndsWith($"/api/retailers/{retailerId}", response.Headers.Location!.OriginalString);
+
+        var getResponse = await client.GetAsync(response.Headers.Location);
+        Assert.Equal(HttpStatusCode.OK, getResponse.StatusCode);
+
+        var getBody = await getResponse.Content.ReadAsStringAsync();
+        using var getJson = JsonDocument.Parse(getBody);
+
+        Assert.Equal(retailerId, getJson.RootElement.GetProperty("id").GetInt32());
+        Assert.Equal(retailerName, getJson.RootElement.GetProperty("name").GetString());
+        Assert.Equal("AT", getJson.RootElement.GetProperty("country").GetString());
+    }
+
+    [Fact]
+    public async Task CreateRetailer_Returns409_WhenNameAlreadyExists()
+    {
+        // Arrange
+        var client = _factory.CreateClient();
+        var request = new CreateRetailerRequest
+        {
+            Name = "Rewe",
+            Country = "AT"
+        };
+
+        // Act
+        var response = await client.PostAsJsonAsync("/api/retailers", request);
+
+        // Assert
+        Assert.Equal(HttpStatusCode.Conflict, response.StatusCode);
+
+        var body = await response.Content.ReadAsStringAsync();
+        using var json = JsonDocument.Parse(body);
+
+        Assert.Equal("Retailer already exists", json.RootElement.GetProperty("title").GetString());
+        Assert.Equal(RetailerValidationMessages.NameAlreadyExists, json.RootElement.GetProperty("detail").GetString());
+        Assert.Equal((int)HttpStatusCode.Conflict, json.RootElement.GetProperty("status").GetInt32());
+    }
+
+    [Fact]
+    public async Task CreateRetailer_Returns400_WhenCountryIsInvalid()
+    {
+        // Arrange
+        var client = _factory.CreateClient();
+        var request = new CreateRetailerRequest
+        {
+            Name = $"Invalid Country Retailer {Guid.NewGuid():N}",
+            Country = "AUT"
+        };
+
+        // Act
+        var response = await client.PostAsJsonAsync("/api/retailers", request);
+
+        // Assert
+        await AssertValidationErrorAsync(
+            response,
+            "country",
+            RetailerValidationMessages.CountryMustBeIsoCode);
+    }
+
+    #endregion POST /api/retailers
 
     #region GET /api/retailers/{id}/stats
 
@@ -187,7 +281,7 @@ public class RetailersControllerTests : IClassFixture<TestWebApplicationFactory>
 
         Assert.Equal("Retailer not found", json.RootElement.GetProperty("title").GetString());
         Assert.Equal(RetailerValidationMessages.NotFoundOrInactive, json.RootElement.GetProperty("detail").GetString());
-        Assert.Equal(404, json.RootElement.GetProperty("status").GetInt32());
+        Assert.Equal((int)HttpStatusCode.NotFound, json.RootElement.GetProperty("status").GetInt32());
     }
 
     private static async Task AssertValidationErrorAsync(
