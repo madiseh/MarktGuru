@@ -26,6 +26,8 @@ src/OffersService/
 |   |-- ProductService.cs
 |   `-- OfferImportService.cs
 |-- Validators/
+|   |-- OfferListRequestValidator.cs
+|   |-- OfferListValidationMessages.cs
 |   |-- ImportRequestValidator.cs
 |   `-- OfferRowValidator.cs
 |-- Exceptions/
@@ -38,6 +40,11 @@ src/OffersService/
 |   |-- Offer.cs
 |   `-- OfferStatus.cs
 |-- DTOs/
+|   |-- OfferListItemDto.cs
+|   |-- OfferListRequest.cs
+|   `-- OfferListStatus.cs
+|-- Pagination/
+|   `-- PagedList.cs
 |-- IOC/
 |   |-- ExceptionHandling.cs
 |   `-- Services.cs
@@ -60,6 +67,7 @@ tests/OffersService.Tests/
 |   |-- OffersControllerTests.cs
 |   `-- ProductsControllerTests.cs
 |-- Helpers/
+|   |-- DbCommandCounterInterceptor.cs
 |   `-- TestWebApplicationFactory.cs
 `-- OffersService.Tests.csproj
 ```
@@ -68,6 +76,7 @@ tests/OffersService.Tests/
 
 | Method | Path | Description |
 |--------|------|-------------|
+| `GET` | `/api/offers` | Returns validated, paginated offers filtered by product, retailer, and status |
 | `GET` | `/api/offers/active` | Returns all currently active offers |
 | `GET` | `/api/offers/{id}` | Returns a single offer by ID |
 | `POST` | `/api/offers/import` | Bulk-imports offers from a JSON payload |

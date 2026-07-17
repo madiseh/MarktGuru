@@ -42,9 +42,12 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>
                 command.ExecuteNonQuery();
             }
 
+            services.AddSingleton<DbCommandCounterInterceptor>();
             services.AddSingleton<DbConnection>(connection);
             services.AddDbContext<AppDbContext>((sp, options) =>
-                options.UseSqlite(sp.GetRequiredService<DbConnection>()));
+                options
+                    .UseSqlite(sp.GetRequiredService<DbConnection>())
+                    .AddInterceptors(sp.GetRequiredService<DbCommandCounterInterceptor>()));
 
             // Replace Hangfire's MySQL storage so the test host starts without a DB.
             services.AddHangfire(config => config.UseInMemoryStorage());

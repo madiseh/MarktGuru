@@ -42,3 +42,4 @@ rtk powershell -NoProfile -Command "Get-ChildItem -Force"
 ## Architecture Notes
 
 - Retailers are part of the seeded EF Core data model. `Offer.RetailerId` is nullable and uses `DeleteBehavior.SetNull`.
+- `GET /api/offers` uses `OfferListRequestValidator` and returns a `PagedList<OfferListItemDto>` with `TotalCount`, page metadata, and navigation flags.

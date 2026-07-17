@@ -12,6 +12,7 @@
 - 2026-07-17: Added validation for null entries inside import rows so `rows = [null]` returns `400 Bad Request` with a row-level error instead of dereferencing the row.
 - 2026-07-17: Asserting the missing-product validation response body in import integration tests.
 - 2026-07-17: Eliminated the products endpoint N+1 offer loading query and added product service/API regression tests.
+- 2026-07-17: Added validated `GET /api/offers` listing with pagination, filtering, and integration coverage for invalid query values.
 
 ## Design Decisions
 
@@ -27,6 +28,8 @@
 - 2026-07-16: Moved EF Core entity mapping and seed data into `Data/Configurations` with `IEntityTypeConfiguration<T>`.
 - 2026-07-16: Added project agent rules, documentation routing, and initial `docs/` Markdown files.
 - 2026-07-17: Centralized import validation messages in `ImportValidationMessages` so validators and tests do not duplicate literal error text.
+- 2026-07-17: Registered offer-list validation through `src/OffersService/IOC/Services.cs` to preserve the current application composition pattern.
+- 2026-07-17: Introduced a reusable `PagedList<T>` response model with page metadata and navigation flags for offer listing responses.
 
 ## With More Time
 

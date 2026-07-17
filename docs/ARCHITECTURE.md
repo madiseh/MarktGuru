@@ -16,6 +16,7 @@ Offers Service is an ASP.NET Core backend for retail product offers. It exposes 
 | Extensions | `src/OffersService/Extensions` | Shared query and framework helper extensions |
 | Models | `src/OffersService/Models` | EF Core entities and domain enums |
 | DTOs | `src/OffersService/DTOs` | API and import contracts |
+| Pagination | `src/OffersService/Pagination` | Shared pagination response helpers |
 | Data | `src/OffersService/Data` | DbContext, entity type configurations, migrations |
 | Tests | `tests/OffersService.Tests` | Unit and integration coverage |
 
@@ -37,6 +38,18 @@ Validator error messages must be centralized in a focused message catalog next
 to the validator, for example `ImportValidationMessages` in
 `src/OffersService/Validators`. Validators and tests should reference those
 constants or factory methods instead of repeating literal error strings inline.
+
+## Offer Listing
+
+`GET /api/offers` accepts an `OfferListRequest` query object and validates it
+with `OfferListRequestValidator` before calling `IOfferService`. The endpoint
+returns `PagedList<OfferListItemDto>` and supports filtering by product,
+retailer, and list status (`active`, `expired`, or `all`).
+
+The listing query projects directly to response data and uses the reusable
+`PagedList<T>` helper to compute `TotalCount`, page metadata, `HasNextPage`, and
+`HasPreviousPage`. The total is computed before pagination and rows without a
+retailer are excluded from the retailer-aware listing endpoint.
 
 ## Data Model
 

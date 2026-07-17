@@ -1,10 +1,12 @@
 using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
+using Microsoft.Extensions.DependencyInjection;
 using OffersService.DTOs;
 using OffersService.Tests.Helpers;
 using OffersService.Validators;
 using Xunit;
+using static OffersService.Tests.Helpers.OffersControllerTestHelper;
 
 namespace OffersService.Tests.Integration;
 
@@ -16,6 +18,119 @@ public class OffersControllerTests : IClassFixture<TestWebApplicationFactory>
     {
         _factory = factory;
     }
+
+    #region Performance
+
+    [Theory]
+    [InlineData("/api/offers?page=1&pageSize=1", 2)]
+    public async Task OffersApi_ExecutesExpectedDatabaseCommandCount(string url, int expectedCommandCount)
+    {
+        // Arrange
+        var client = _factory.CreateClient();
+        var commandCounter = _factory.Services.GetRequiredService<DbCommandCounterInterceptor>();
+        commandCounter.Reset();
+
+        // Act
+        var response = await client.GetAsync(url);
+
+        // Assert
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        Assert.Equal(expectedCommandCount, commandCounter.ExecutedCount);
+    }
+
+    #endregion Performance
+
+    #region GET /api/offers
+
+    [Theory]
+    [InlineData("", "1,3")]
+    [InlineData("?page=2&pageSize=1", "3")]
+    [InlineData("?status=all", "1,2,3")]
+    [InlineData("?productId=1", "1")]
+    [InlineData("?retailerId=1", "1,3")]
+    [InlineData("?status=expired&productId=2&retailerId=2", "2")]
+    public async Task GetOffers_ReturnsExpectedOfferIds(
+        string queryString,
+        string expectedOfferIds)
+    {
+        // Arrange
+        var client = _factory.CreateClient();
+
+        // Act
+        var response = await client.GetAsync($"/api/offers{queryString}");
+
+        // Assert
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        var body = await response.Content.ReadAsStringAsync();
+        using var json = JsonDocument.Parse(body);
+
+        Assert.Equal(ParseIds(expectedOfferIds), GetOfferIds(json.RootElement));
+    }
+
+    [Theory]
+    [InlineData("", 2, 1, 20, false, false)]
+    [InlineData("?page=1&pageSize=1", 2, 1, 1, true, false)]
+    [InlineData("?page=2&pageSize=1", 2, 2, 1, false, true)]
+    public async Task GetOffers_ReturnsExpectedPaginationMetadata(
+        string queryString,
+        int expectedTotalCount,
+        int expectedPage,
+        int expectedPageSize,
+        bool expectedHasNextPage,
+        bool expectedHasPreviousPage)
+    {
+        // Arrange
+        var client = _factory.CreateClient();
+
+        // Act
+        var response = await client.GetAsync($"/api/offers{queryString}");
+
+        // Assert
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        var body = await response.Content.ReadAsStringAsync();
+        using var json = JsonDocument.Parse(body);
+
+        Assert.Equal(expectedTotalCount, json.RootElement.GetProperty(PagedListProperty.TotalCount).GetInt32());
+        Assert.Equal(expectedPage, json.RootElement.GetProperty(PagedListProperty.Page).GetInt32());
+        Assert.Equal(expectedPageSize, json.RootElement.GetProperty(PagedListProperty.PageSize).GetInt32());
+        Assert.Equal(expectedHasNextPage, json.RootElement.GetProperty(PagedListProperty.HasNextPage).GetBoolean());
+        Assert.Equal(expectedHasPreviousPage, json.RootElement.GetProperty(PagedListProperty.HasPreviousPage).GetBoolean());
+    }
+
+    [Theory]
+    [InlineData("?pageSize=101", "pagesize", OfferListValidationMessages.PageSizeMustNotExceedLimit)]
+    [InlineData("?pageSize=0", "pagesize", OfferListValidationMessages.PageSizeMustBePositive)]
+    [InlineData("?status=pending", "status", null)]
+    [InlineData("?status=99", "status", null)]
+    [InlineData("?page=2147483647&pageSize=2", "page", OfferListValidationMessages.OffsetMustNotBeTooLarge)]
+    [InlineData("?page=0", "page", OfferListValidationMessages.PageMustBePositive)]
+    [InlineData("?productId=0", "productid", OfferListValidationMessages.ProductIdMustBePositive)]
+    [InlineData("?retailerId=-1", "retailerid", OfferListValidationMessages.RetailerIdMustBePositive)]
+    public async Task GetOffers_Returns400_WhenQueryIsInvalid(
+        string queryString,
+        string errorProperty,
+        string? errorMessage)
+    {
+        // Arrange
+        var client = _factory.CreateClient();
+
+        // Act
+        var response = await client.GetAsync($"/api/offers{queryString}");
+
+        // Assert
+        await AssertBadRequestErrorAsync(
+            response,
+            errorProperty,
+            errorMessage);
+    }
+
+    #endregion GET /api/offers
+
+    
+
+    #region GET /api/offers/active
 
     [Fact]
     public async Task GetActiveOffers_ReturnsActiveOffers_InResponseBody()
@@ -44,6 +159,10 @@ public class OffersControllerTests : IClassFixture<TestWebApplicationFactory>
         Assert.Contains(3, offerIds);
         Assert.DoesNotContain(2, offerIds);
     }
+
+    #endregion GET /api/offers/active
+
+    #region POST /api/offers/import
 
     [Fact]
     public async Task ImportOffers_ReturnsImportedCount_InResponseBody()
@@ -155,4 +274,6 @@ public class OffersControllerTests : IClassFixture<TestWebApplicationFactory>
         Assert.True(errors.TryGetProperty("rows[0]", out var rowErrors));
         Assert.Contains(rowErrors.EnumerateArray(), error => error.GetString() == ImportValidationMessages.OfferRowRequired);
     }
+
+    #endregion POST /api/offers/import
 }

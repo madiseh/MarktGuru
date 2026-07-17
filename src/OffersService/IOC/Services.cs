@@ -12,6 +12,7 @@ public static class Services
         services.AddScoped<IOfferService, OfferService>();
         services.AddScoped<IProductService, ProductService>();
         services.AddScoped<IOfferImportService, OfferImportService>();
+        services.AddScoped<IValidator<OfferListRequest>, OfferListRequestValidator>();
         services.AddScoped<IValidator<OfferRow>, OfferRowValidator>();
         services.AddScoped<IValidator<ImportRequest>, ImportRequestValidator>();
 
