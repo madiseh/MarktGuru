@@ -13,6 +13,7 @@
 - 2026-07-17: Asserting the missing-product validation response body in import integration tests.
 - 2026-07-17: Eliminated the products endpoint N+1 offer loading query and added product service/API regression tests.
 - 2026-07-17: Added validated `GET /api/offers` listing with pagination, filtering, and integration coverage for invalid query values.
+- 2026-07-17: Added `GET /api/retailers/{id}/stats` with route id validation, active-retailer 404 behavior, single-query active-offer aggregates, and unit/integration coverage.
 
 ## Design Decisions
 
@@ -30,6 +31,7 @@
 - 2026-07-17: Centralized import validation messages in `ImportValidationMessages` so validators and tests do not duplicate literal error text.
 - 2026-07-17: Registered offer-list validation through `src/OffersService/IOC/Services.cs` to preserve the current application composition pattern.
 - 2026-07-17: Introduced a reusable `PagedList<T>` response model with page metadata and navigation flags for offer listing responses.
+- 2026-07-17: Registered retailer stats services and validators through `src/OffersService/IOC/Services.cs` to keep application composition centralized.
 
 ## With More Time
 

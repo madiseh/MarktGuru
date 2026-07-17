@@ -51,6 +51,20 @@ The listing query projects directly to response data and uses the reusable
 `HasPreviousPage`. The total is computed before pagination and rows without a
 retailer are excluded from the retailer-aware listing endpoint.
 
+## Retailer Statistics
+
+`GET /api/retailers/{id}/stats` accepts a route-bound `RetailerStatsRequest`
+and validates the retailer id with `RetailerStatsRequestValidator` before
+calling `IRetailerService`. Validation and not-found/inactive-retailer messages
+come from `RetailerValidationMessages`.
+
+`RetailerService.GetStatsAsync` returns data only for active retailers and
+projects active-offer aggregates directly from EF Core: active offer count,
+average price, lowest price, and the most recent active offer. The endpoint is
+covered by integration tests that assert successful output, invalid ids,
+missing/inactive retailers, empty active-offer stats, and single database
+round-trip behavior.
+
 ## Data Model
 
 Current seeded model:
@@ -67,6 +81,7 @@ Entity mapping and seed data are defined in `src/OffersService/Data/Configuratio
 - Prefer projections for read endpoints that join multiple tables.
 - Avoid N+1 queries by using projections, includes, or aggregate queries intentionally.
 - For paginated endpoints, compute `total` before pagination is applied.
+- For retailer stats, keep the aggregate response as one composed EF query.
 - Requirements that specify a single database round-trip should be handled with one composed EF query or a deliberate raw SQL query.
 
 ## Background Jobs

@@ -20,16 +20,20 @@
 src/OffersService/
 |-- Controllers/
 |   |-- OffersController.cs
-|   `-- ProductsController.cs
+|   |-- ProductsController.cs
+|   `-- RetailersController.cs
 |-- Services/
 |   |-- OfferService.cs
 |   |-- ProductService.cs
-|   `-- OfferImportService.cs
+|   |-- OfferImportService.cs
+|   `-- RetailerService.cs
 |-- Validators/
 |   |-- OfferListRequestValidator.cs
 |   |-- OfferListValidationMessages.cs
 |   |-- ImportRequestValidator.cs
-|   `-- OfferRowValidator.cs
+|   |-- OfferRowValidator.cs
+|   |-- RetailerStatsRequestValidator.cs
+|   `-- RetailerValidationMessages.cs
 |-- Exceptions/
 |   |-- GlobalExceptionHandler.cs
 |   `-- ValidationExceptionHandler.cs
@@ -38,12 +42,16 @@ src/OffersService/
 |-- Models/
 |   |-- Product.cs
 |   |-- Offer.cs
-|   `-- OfferStatus.cs
+|   |-- OfferStatus.cs
+|   `-- Retailer.cs
 |-- DTOs/
 |   |-- OfferListItemDto.cs
 |   |-- OfferListRequest.cs
-|   `-- OfferListStatus.cs
-|-- Pagination/
+|   |-- OfferListStatus.cs
+|   |-- RetailerStatsRequest.cs
+|   |-- RetailerStatsDto.cs
+|   `-- MostRecentActiveOfferDto.cs
+|-- Models/Pagination/
 |   `-- PagedList.cs
 |-- IOC/
 |   |-- ExceptionHandling.cs
@@ -52,7 +60,8 @@ src/OffersService/
     |-- AppDbContext.cs
     |-- Configurations/
     |   |-- ProductConfiguration.cs
-    |   `-- OfferConfiguration.cs
+    |   |-- OfferConfiguration.cs
+    |   `-- RetailerConfiguration.cs
     `-- Migrations/
 ```
 
@@ -62,10 +71,12 @@ src/OffersService/
 tests/OffersService.Tests/
 |-- Unit/
 |   |-- OfferServiceTests.cs
-|   `-- ProductServiceTests.cs
+|   |-- ProductServiceTests.cs
+|   `-- RetailerServiceTests.cs
 |-- Integration/
 |   |-- OffersControllerTests.cs
-|   `-- ProductsControllerTests.cs
+|   |-- ProductsControllerTests.cs
+|   `-- RetailersControllerTests.cs
 |-- Helpers/
 |   |-- DbCommandCounterInterceptor.cs
 |   `-- TestWebApplicationFactory.cs
@@ -81,6 +92,7 @@ tests/OffersService.Tests/
 | `GET` | `/api/offers/{id}` | Returns a single offer by ID |
 | `POST` | `/api/offers/import` | Bulk-imports offers from a JSON payload |
 | `GET` | `/api/products` | Returns products with their associated offers |
+| `GET` | `/api/retailers/{id}/stats` | Returns single-query active-offer statistics for an active retailer |
 
 ## README Tasks
 
