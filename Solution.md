@@ -40,6 +40,12 @@
 - 2026-07-17: Kept offer listing in `OfferService` with EF Core LINQ only, avoiding hand-written SQL while the list endpoint still uses one database command.
 - 2026-07-17: Registered retailer stats services and validators through `src/OffersService/IOC/Services.cs` to keep application composition centralized.
 - 2026-07-17: Added `GET /api/retailers/{id}` so retailer creation responses can point the `Location` header at a concrete retailer resource.
+- 2026-07-17: Added `OfferExpiryJob` with bulk EF Core expiration logic and registered jobs through a focused `src/OffersService/IOC/Jobs.cs` extension.
+- 2026-07-17: Registered Hangfire recurring execution for `OfferExpiryJob` in `Program.cs` with the hourly cron expression helper.
+- 2026-07-17: Added `Allow User Variables=true` to MySQL connection strings so Hangfire dashboard queries that use `@rownum` work with MySQL storage.
+- 2026-07-17: Added SQLite-backed unit tests for `OfferExpiryJob` covering matching-row expiration, clean-database idempotency, logging, and one database `UPDATE` command.
+- 2026-07-17: Moved the test `ListLogger<T>` into `tests/OffersService.Tests/Helpers` so future tests can reuse captured log assertions.
+- 2026-07-17: Moved Hangfire recurring job registration into `src/OffersService/IOC/RecurringJobs.cs` and kept `Program.cs` as a single extension-method call.
 
 ## With More Time
 

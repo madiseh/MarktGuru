@@ -23,6 +23,7 @@ builder.Services.AddHangfire(config =>
 builder.Services.AddHangfireServer();
 
 builder.Services.AddApplicationServices();
+builder.Services.AddApplicationJobs();
 
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
@@ -51,6 +52,7 @@ if (app.Environment.IsDevelopment())
 app.UseApplicationExceptionHandling();
 app.UseHangfireDashboard("/hangfire");
 app.MapControllers();
+app.UseApplicationRecurringJobs();
 
 app.Run();
 
