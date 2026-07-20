@@ -20,13 +20,10 @@
 - 2026-07-17: Added `POST /api/retailers` with centralized validation, duplicate-name conflict handling, `201 Created` responses, and integration coverage for success, duplicate names, and invalid country codes.
 - 2026-07-17: Tightened retailer country validation from two alphabetic characters to membership in officially assigned ISO 3166-1 alpha-2 country codes.
 - 2026-07-17: Updated `GET /api/offers` to include offers without retailers by returning nullable retailer fields instead of filtering those rows out.
+- 2026-07-17: Hardened `GET /api/offers` status query validation so numeric enum values such as `status=0` are rejected; only `active`, `expired`, and `all` are accepted.
 
 ## Design Decisions
 
-- 2026-07-17: Added the `Retailers` table with required unique names, two-character country codes, active status, creation time, and seeded `Rewe` and `Billa` records.
-- 2026-07-17: Added nullable `Offer.RetailerId` support with an EF Core navigation to `Retailer`, an index on `Offers.RetailerId`, and `SetNull` delete behavior so offers are retained if a retailer is removed.
-- 2026-07-17: Updated existing seeded offers to reference the seeded retailers while keeping `RetailerId` nullable as required by the exercise.
-- 2026-07-17: Kept retailer mapping in `RetailerConfiguration` and table naming in `TableNames` to match the project's configuration-based EF Core structure.
 - 2026-07-16: Added centralized problem-details exception handlers for validation and unexpected application errors, registered through `src/OffersService/IOC/ExceptionHandling.cs`.
 - 2026-07-16: Switched integration tests to SQLite in-memory with foreign keys enabled so relational constraints are exercised.
 - 2026-07-16: Added `src/OffersService/IOC/Services.cs` for application service dependency injection registration.
@@ -46,12 +43,24 @@
 - 2026-07-17: Added SQLite-backed unit tests for `OfferExpiryJob` covering matching-row expiration, clean-database idempotency, logging, and one database `UPDATE` command.
 - 2026-07-17: Moved the test `ListLogger<T>` into `tests/OffersService.Tests/Helpers` so future tests can reuse captured log assertions.
 - 2026-07-17: Moved Hangfire recurring job registration into `src/OffersService/IOC/RecurringJobs.cs` and kept `Program.cs` as a single extension-method call.
+- 2026-07-17: Added the `Retailers` table with required unique names, two-character country codes, active status, creation time, and seeded `Rewe` and `Billa` records.
+- 2026-07-17: Added nullable `Offer.RetailerId` support with an EF Core navigation to `Retailer`, an index on `Offers.RetailerId`, and `SetNull` delete behavior so offers are retained if a retailer is removed.
+- 2026-07-17: Updated existing seeded offers to reference the seeded retailers while keeping `RetailerId` nullable as required by the exercise.
+- 2026-07-17: Kept retailer mapping in `RetailerConfiguration` and table naming in `TableNames` to match the project's configuration-based EF Core structure.
 
 ## With More Time
 
-- To be completed before submission.
-
+- I would first move the project closer to Clean Architecture by separating API, Application, Domain, and Infrastructure concerns more clearly.
+- I would add architecture tests to enforce those boundaries, such as preventing Domain from depending on Infrastructure, keeping business logic out of controllers, and avoiding unnecessary framework dependencies in Application code.
+- I would further separate dependency injection setup into focused extension methods for services, validators, persistence, jobs, and exception handling.
+- I would add end-to-end tests that exercise full flows through HTTP and the database, including retailer creation, offer import, offer listing, retailer stats, and offer expiry.
+- I would run the end-to-end tests against MariaDB through Docker to catch provider-specific behavior that SQLite-backed tests may miss.
+- I would add contract-style tests for the API response shapes described in the README, so endpoint responses do not accidentally drift from the expected schema.
+- I would add project-specific AI rules or skills to reduce hallucination and make future AI-assisted changes follow the project architecture, conventions, documentation routing, and test expectations.
+- I would improve API documentation with concrete request and response examples for the new endpoints.
+- I would review production Hangfire settings, including dashboard access, retry behavior, and storage configuration.
 ## Time Spent
 
-- Without AI: To be completed before submission.
-- With AI: To be completed before submission.
+The exercise took me approximately 7-8 hours of elapsed time overall.
+Around 3-4 hours were active hands-on work from my side, including reviewing the requirements, validating the implementation, running tests, and documenting the solution.
+The rest of the time was spent waiting for AI responses and using AI assistance to get implementation support, hints, and feedback while iterating on the solution.
