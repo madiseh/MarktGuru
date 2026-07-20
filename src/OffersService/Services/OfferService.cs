@@ -128,7 +128,7 @@ public class OfferService : IOfferService
             filteredOffers = filteredOffers.Where(offer => offer.RetailerId == request.RetailerId.Value);
         }
 
-        return request.Status switch
+        return request.ToStatus() switch
         {
             OfferListStatus.Active => filteredOffers.Where(offer =>
                 offer.Status == OfferStatus.Active &&

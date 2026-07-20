@@ -34,7 +34,19 @@ public class OfferListRequestValidator : AbstractValidator<OfferListRequest>
             .WithMessage(OfferListValidationMessages.RetailerIdMustBePositive);
 
         RuleFor(request => request.Status)
-            .IsInEnum()
+            .Must(BeSupportedStatus)
             .WithMessage(OfferListValidationMessages.StatusMustBeSupported);
+    }
+
+    private static bool BeSupportedStatus(string? status)
+    {
+        if (string.IsNullOrWhiteSpace(status))
+        {
+            return false;
+        }
+
+        return status.Trim().Equals("active", StringComparison.OrdinalIgnoreCase) ||
+               status.Trim().Equals("expired", StringComparison.OrdinalIgnoreCase) ||
+               status.Trim().Equals("all", StringComparison.OrdinalIgnoreCase);
     }
 }
