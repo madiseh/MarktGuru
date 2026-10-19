@@ -37,6 +37,32 @@ public class OffersController : ControllerBase
         return Ok(response);
     }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     [HttpGet("active")]
     public async Task<ActionResult<IEnumerable<OfferDto>>> GetActiveOffers()
     {

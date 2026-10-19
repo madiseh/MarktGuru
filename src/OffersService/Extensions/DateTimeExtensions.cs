@@ -11,4 +11,11 @@ public static class DateTimeExtensions
             ? dateTime
             : DateTime.SpecifyKind(dateTime, DateTimeKind.Utc);
     }
+
+    public static DateTime DateMax(this DateTime dateTime)
+    {
+        return dateTime.Kind == DateTimeKind.Utc
+            ? dateTime
+            : DateTime.SpecifyKind(dateTime, DateTimeKind.Utc);
+    }
 }
